@@ -1,0 +1,24 @@
+apiVersion: skaffold/v4beta4
+kind: Config
+metadata:
+  name: words
+build:
+  artifacts:
+    - image: wordsapi
+      context: ../../
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  helm:
+    releases:
+      - name: wordsapi
+        chartPath: .
+        valuesFiles:
+          - values.yaml
+        version: 0.1.0
+portForward:
+- resourceType: deployment
+  resourceName: wordsapi
+  port: 52000
+  localPort: 52000
+

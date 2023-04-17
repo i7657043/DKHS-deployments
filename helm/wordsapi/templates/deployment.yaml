@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordsapi
+  labels:
+    app: wordsapi-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: wordsapi
+  template:
+    metadata:
+      labels:
+        app: wordsapi-app
+        service: wordsapi
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "wordsapi-app"
+        dapr.io/log-level: "debug"
+    spec:
+      containers:
+        - name: wordsapicontainer
+          image: {{ .Values.image }}:{{ .Values.imagetag }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 52000
+              protocol: TCP
